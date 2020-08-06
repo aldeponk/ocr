@@ -1,0 +1,72 @@
+
+from https://tesseract-ocr.github.io/tessdoc/Training-Tesseract-3.03%E2%80%933.05
+
+
+1. create temp dir for training
+
+2. in temp dir for training
+2.1 create txt file ending with \n with contents for cga words
+ex : training_cga.txt
+hfxspc (hotfix) specific [git] Git {Gitlab} rights #1 repository $2 3.12,45 feature &develop/v8 * http:// cgaflow https:// ?jenkins
+
+2.2 run training for each font needed (enrich fonts with truetype/opentype)
+sudo text2image --text=training_cga.txt --outputbase=cga.Arial.exp0 --font='Arial' --fonts_dir=/usr/share/fonts
+
+2.3 train each box
+sudo tesseract cga.Arial.exp0.tif cga.Arial.exp0 box.train
+
+2.4 generate unicharset 
+sudo unicharset_extractor cga.Arial.exp0.box
+
+2.5 set unicharset props 
+https://github.com/tesseract-ocr/langdata
+################ TO BE CONTINUED
+################ recuperer l'unicharset eng.unicharset ? 
+################ pour ça, utiliser sudo combine_tessdata -u eng.traineddata tmp/eng.
+
+2.6 setup font properties
+download https://github.com/tesseract-ocr/langdata/blob/master/font_properties
+
+2.7 mftraining
+sudo mftraining -F font_properties -U unicharset -O cga.unicharset cga.Arial.exp0.tr (.... si plusieurs polices)
+==> generates these files:
+cga.unicharset
+inttemp
+pffmtable
+shapetable
+
+2.8 cntraining
+sudo cntraining cga.Arial.exp0.tr
+==> generates file:
+normproto
+
+2.9 Optional dictionaries
+########## not done
+
+2.10 unicharambigs
+takes same as eng.unicharambigs
+
+3.0 Generate training
+3.1 rename file to lang.
+3.2 assembly
+sudo combine_tessdata cga.
+3.3 copy cga.traineddata to tessdata dir
+sudo cp cga.traineddata /usr/share/tesseract-ocr/tessdata/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
